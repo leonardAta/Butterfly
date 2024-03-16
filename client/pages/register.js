@@ -1,24 +1,30 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Modal } from 'antd'
+import Link from 'next/link'
 
 const Register = () => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [secret, setSecret] = useState('')
+    const [ok, setOk] = useState(false)
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        // console.log(name, email, password, secret)
-        axios
-            .post('http://localhost:9000/api/register', {
+        try {
+            const { data } = await axios.post('http://localhost:9000/api/register', {
                 name,
                 email,
                 password,
                 secret,
             })
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err))
+            // toast.success('Registration Successful!')
+            setOk(data.ok)
+        } catch (err) {
+            toast.error(err.response.data)
+        }
     }
 
     return (
@@ -81,10 +87,6 @@ const Register = () => {
                                 <option>What is the name of your best friend?</option>
                                 <option>What is your mother's birth month?</option>
                             </select>
-
-                            {/* <small className='form-text text-muted'>
-                                Use this to reset your password if you forget it.
-                            </small> */}
                         </div>
 
                         <div className='form-group p-2'>
@@ -106,7 +108,24 @@ const Register = () => {
                     </form>
                 </div>
             </div>
+
+            <div className='row'>
+                <div className='col'>
+                    <Modal
+                        title='Congratulations!'
+                        open={ok} // Use `visible` prop to control the modal's visibility
+                        onCancel={() => setOk(false)} // Use onCancel to hide the modal
+                        footer={null} // If you don't want a default footer, set it to null
+                    >
+                        <p>Registration Successful!</p>
+                        <Link href='/login'>
+                            <a className='btn btn-primary btn-sm'>Login</a>{' '}
+                        </Link>
+                    </Modal>
+                </div>
+            </div>
         </div>
     )
 }
+
 export default Register
