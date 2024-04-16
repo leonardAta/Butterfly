@@ -87,7 +87,11 @@ const Form = ({
 
         <div className='form-group p-2'>
             <button
-                disabled={page === 'login' ? !email || !password : !name || !email || !password || !secret}
+                disabled={
+                    page === 'login'
+                        ? !email || !password || loading
+                        : !name || !email || !password || !secret || loading
+                }
                 className='btn btn-primary col-12'
             >
                 {loading ? <SyncOutlined spin className='py-1' /> : 'Submit'}

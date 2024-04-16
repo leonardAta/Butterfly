@@ -1,6 +1,6 @@
-/* img {
+img {
     width: 500px;
-} */
+}
 .bg-default-image {
     background-image: url('/images/default.jpg');
     background-size: 100%;
@@ -10,4 +10,8 @@
 
 .logo {
     text-shadow: 1px 1px gold;
+}
+
+.active {
+    background-color: rgb(45, 28, 7);
 }

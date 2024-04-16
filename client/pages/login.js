@@ -20,21 +20,28 @@ const Login = () => {
         e.preventDefault()
         try {
             setLoading(true)
-            const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API}/login`, {
+            const { data } = await axios.post(`/login`, {
                 email,
                 password,
             })
-            setState({
-                user: data.user,
-                token: data.token,
-            })
-            window.localStorage.setItem('auth', JSON.stringify(data))
-            router.push('/')
+            if (data.error) {
+                toast.error(data.error)
+                setLoading(false)
+            } else {
+                setState({
+                    user: data.user,
+                    token: data.token,
+                })
+                window.localStorage.setItem('auth', JSON.stringify(data))
+                router.push('/')
+            }
         } catch (err) {
             toast.error(err.response.data)
             setLoading(false)
         }
     }
+
+    if (state && state.token) router.push('/')
 
     return (
         <div className='container-fluid'>
@@ -62,6 +69,16 @@ const Login = () => {
                 <div className='col'>
                     <p className='text-center'>
                         Don't have an account? <Link href='/register'>Sign Up</Link>
+                    </p>
+                </div>
+            </div>
+
+            <div className='row'>
+                <div className='col'>
+                    <p className='text-center'>
+                        <Link href='/forgot-password' className='text-danger'>
+                            Forgot Password?
+                        </Link>
                     </p>
                 </div>
             </div>
