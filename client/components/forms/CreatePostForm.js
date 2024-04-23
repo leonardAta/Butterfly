@@ -1,11 +1,10 @@
 import { Avatar } from 'antd'
 import dynamic from 'next/dynamic'
-// import ReactQuill from 'react-quill'
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
-
+import { CameraOutlined } from '@ant-design/icons'
 import 'react-quill/dist/quill.snow.css'
 
-const CreatePostForm = ({ content, setContent, postSubmit }) => {
+const CreatePostForm = ({ content, setContent, postSubmit, handleImage }) => {
     return (
         <div className='card'>
             <div className='card-body pb-3'>
@@ -19,10 +18,16 @@ const CreatePostForm = ({ content, setContent, postSubmit }) => {
                     />
                 </form>
             </div>
-            <div class='card-footer'>
+
+            <div class='card-footer d-flex justify-content-between text-muted'>
                 <button disabled={!content} onClick={postSubmit} className='btn btn-primary btn-sm mt-1'>
                     Post
                 </button>
+
+                <label>
+                    <CameraOutlined className='mt-2' />
+                    <input onChange={handleImage} type='file' accept='images/*' hidden />
+                </label>
             </div>
         </div>
     )

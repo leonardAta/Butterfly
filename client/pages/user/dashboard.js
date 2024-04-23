@@ -35,6 +35,19 @@ const Home = () => {
             toast.error('An error occurred while creating the post.')
         }
     }
+    const handleImage = async (e) => {
+        const file = e.target.files[0]
+        let formData = new FormData()
+        formData.append('image', file)
+        console.log([...formData])
+        try {
+            const { data } = await axios.post('/upload-image', formData)
+            console.log('uploaded image => ', data)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     return (
         <div className='container-fluid'>
             <div className='row py-5 text-light bg-default-image'>
@@ -45,7 +58,12 @@ const Home = () => {
             </div>
             <div className='row py-3'>
                 <div className='col-md-8'>
-                    <CreatePostForm content={content} setContent={setContent} postSubmit={postSubmit} />
+                    <CreatePostForm
+                        content={content}
+                        setContent={setContent}
+                        postSubmit={postSubmit}
+                        handleImage={handleImage}
+                    />
                 </div>
                 <div className='col-md-4'>Sidebar</div>
             </div>
