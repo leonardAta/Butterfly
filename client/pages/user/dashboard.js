@@ -9,6 +9,8 @@ import { toast } from 'react-toastify'
 const Home = () => {
     const [state, setState] = useContext(UserContext)
     const [content, setContent] = useState('')
+    const [image, setImage] = useState({})
+    const [uploading, setUploading] = useState(false)
     const router = useRouter()
 
     const postSubmit = async (e) => {
@@ -16,7 +18,7 @@ const Home = () => {
         // console.log('post =>', content)
         try {
             // const { data } = await axios.post('/create-post', { content })
-            const response = await axios.post('/create-post', { content })
+            const response = await axios.post('/create-post', { content, image })
             if (response && response.data) {
                 console.log('Create-post response => ', response.data)
                 const { data } = response
@@ -25,6 +27,7 @@ const Home = () => {
                 } else {
                     toast.success('Flutter Created!')
                     setContent('')
+                    setImage({})
                 }
             } else {
                 // Handle the case where the response does not have a 'data' property
@@ -39,12 +42,19 @@ const Home = () => {
         const file = e.target.files[0]
         let formData = new FormData()
         formData.append('image', file)
-        console.log([...formData])
+        // console.log([...formData])
+        setUploading(true)
         try {
             const { data } = await axios.post('/upload-image', formData)
-            console.log('uploaded image => ', data)
+            // console.log('uploaded image => ', data)
+            setImage({
+                url: data.url,
+                public_id: data.public_id,
+            })
+            setUploading(false)
         } catch (err) {
             console.log(err)
+            setUploading(false)
         }
     }
 
@@ -63,6 +73,8 @@ const Home = () => {
                         setContent={setContent}
                         postSubmit={postSubmit}
                         handleImage={handleImage}
+                        uploading={uploading}
+                        image={image}
                     />
                 </div>
                 <div className='col-md-4'>Sidebar</div>
