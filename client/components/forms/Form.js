@@ -12,8 +12,41 @@ const Form = ({
     setSecret,
     loading,
     page,
+    username,
+    setUsername,
+    about,
+    setAbout,
+    profileUpdate,
 }) => (
     <form onSubmit={handleSubmit}>
+        {profileUpdate && (
+            <div className='form-group p-2'>
+                <small>
+                    <label className='text-muted'>Username</label>
+                </small>
+                <input
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    type='text'
+                    className='form-control'
+                    placeholder='Enter Username'
+                />
+            </div>
+        )}
+        {profileUpdate && (
+            <div className='form-group p-2'>
+                <small>
+                    <label className='text-muted'>About</label>
+                </small>
+                <input
+                    value={about}
+                    onChange={(e) => setAbout(e.target.value)}
+                    type='text'
+                    className='form-control'
+                    placeholder='Enter Bio...'
+                />
+            </div>
+        )}
         {page !== 'login' && (
             <div className='form-group p-2'>
                 <small>
@@ -28,7 +61,6 @@ const Form = ({
                 />
             </div>
         )}
-
         <div className='form-group p-2'>
             <small>
                 <label className='text-muted'>Email Address</label>
@@ -39,9 +71,9 @@ const Form = ({
                 type='email'
                 className='form-control'
                 placeholder='Enter Email Address'
+                disabled={profileUpdate}
             />
         </div>
-
         <div className='form-group p-2'>
             <small>
                 <label className='text-muted'>Password</label>
@@ -54,7 +86,6 @@ const Form = ({
                 placeholder='Enter Password'
             />
         </div>
-
         {page !== 'login' && (
             <>
                 <div className='form-group p-2'>
@@ -84,11 +115,12 @@ const Form = ({
                 </div>
             </>
         )}
-
         <div className='form-group p-2'>
             <button
                 disabled={
-                    page === 'login'
+                    profileUpdate
+                        ? loading
+                        : page === 'login'
                         ? !email || !password || loading
                         : !name || !email || !password || !secret || loading
                 }

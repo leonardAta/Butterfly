@@ -1,6 +1,7 @@
 import User from '../models/user.js'
 import { hashPassword, comparePassword } from '../helpers/auth.js'
 import jwt from 'jsonwebtoken'
+import { nanoid } from 'nanoid'
 
 export const register = async (req, res) => {
     // console.log('register endpoint =>', req.body)
@@ -29,7 +30,7 @@ export const register = async (req, res) => {
 
     const hashedPassword = await hashPassword(password)
 
-    const user = new User({ name, email, password: hashedPassword, secret })
+    const user = new User({ name, email, password: hashedPassword, secret, username: nanoid(5) })
     try {
         await user.save()
         // console.log('registered user =>', user)
@@ -85,23 +86,6 @@ export const currentUser = async (req, res) => {
         res.sendStatus(400)
     }
 }
-// export const getCurrentUser = async () => {
-//     try {
-//         const { data } = await axios.get('/current-user', {
-//             headers: {
-//                 Authorization: `Bearer ${state.token}`, // Ensure the token is included in the request
-//             },
-//         })
-//         if (data.ok) {
-//             setOk(true)
-//         } else {
-//             throw new Error('Failed to fetch user data')
-//         }
-//     } catch (err) {
-//         console.log(err) // More detailed logging can help identify what went wrong
-//         router.push('/login')
-//     }
-// }
 
 export const forgotPassword = async (req, res) => {
     // console.log(req.body)
@@ -133,5 +117,42 @@ export const forgotPassword = async (req, res) => {
         return res.json({
             error: 'Something wrong. Try again',
         })
+    }
+}
+
+export const profileUpdate = async (req, res) => {
+    try {
+        const data = {}
+        if (req.body.username) {
+            data.username = req.body.username
+        }
+        if (req.body.about) {
+            data.about = req.body.about
+        }
+        if (req.body.name) {
+            data.name = req.body.name
+        }
+        if (req.body.password) {
+            if (req.body.password.length < 6) {
+                return res.json({
+                    error: 'Password  should be at least 6 characters long',
+                })
+            } else {
+                data.password = await hashPassword(req.body.password)
+            }
+        }
+        if (req.body.secret) {
+            data.secret = req.body.secret
+        }
+        let user = await User.findByIdAndUpdate(req.auth._id, data, { new: true })
+        console.log('updated user', user)
+        user.password = undefined
+        user.secret = undefined
+        res.json(user)
+    } catch (err) {
+        if (err.code == 11000) {
+            return res.json({ error: 'Username already exists!' })
+        }
+        console.log(err)
     }
 }

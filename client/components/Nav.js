@@ -28,15 +28,43 @@ const Nav = () => {
 
             {state !== null ? (
                 <>
-                    <Link
-                        href='/user/dashboard'
-                        className={`nav-link text-light ${current === '/user/dashboard' && 'active'}`}
-                    >
-                        {state && state.user && state.user.name}
-                    </Link>
-                    <a onClick={logout} className='nav-link text-light'>
-                        Logout
-                    </a>
+                    <div className='dropdown'>
+                        <a
+                            className='btn dropdown-toggle text-light'
+                            role='button'
+                            data-bs-toggle='dropdown'
+                            aria-expanded='false'
+                        >
+                            {state && state.user && state.user.name}
+                        </a>
+                        <ul className='dropdown-menu'>
+                            <li>
+                                <Link
+                                    href='/user/dashboard'
+                                    className={`nav-link dropdown-item  ${current === '/user/dashboard' && 'active'}`}
+                                >
+                                    Dashboard
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link
+                                    href='/user/profile/update'
+                                    className={`nav-link dropdown-item  ${
+                                        current === '/user/profile/update' && 'active'
+                                    }`}
+                                >
+                                    Profile
+                                </Link>
+                            </li>
+
+                            <li>
+                                <a onClick={logout} className='nav-link'>
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </>
             ) : (
                 <>
