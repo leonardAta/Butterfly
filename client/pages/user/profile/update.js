@@ -1,12 +1,12 @@
 import { useState, useContext, useEffect } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Modal } from 'antd'
+import { Modal, Avatar } from 'antd'
 import Link from 'next/link'
 import Form from '../../../components/forms/Form'
 import { UserContext } from '../../../context'
 import { useRouter } from 'next/router'
-import user from '../../../../server/models/user'
+import {LoadingOutlined, CameraOutlined } from '@ant-design/icons'
 
 const ProfileUpdate = () => {
     const [username, setUsername] = useState('')
@@ -18,8 +18,13 @@ const ProfileUpdate = () => {
     const [ok, setOk] = useState(false)
     const [loading, setLoading] = useState(false)
 
+    const [image, setImage] = useState({})
+    const [uploading, setUploading] = useState(false)
+
     const [state, setState] = useContext(UserContext)
     const router = useRouter()
+
+    
 
     useEffect(() => {
         if (state && state.user) {
@@ -28,6 +33,7 @@ const ProfileUpdate = () => {
             setAbout(state.user.about)
             setName(state.user.name)
             setEmail(state.user.email)
+            setImage(state.user.image)
         }
     }, [state && state.user])
 
@@ -42,6 +48,7 @@ const ProfileUpdate = () => {
                 email,
                 password,
                 secret,
+                image,
             })
             console.log('update response =>', data)
 
@@ -65,6 +72,26 @@ const ProfileUpdate = () => {
         }
     }
 
+    const handleImage = async (e) => {
+        const file = e.target.files[0]
+        let formData = new FormData()
+        formData.append('image', file)
+        // console.log([...formData])
+        setUploading(true)
+        try {
+            const { data } = await axios.post('/upload-image', formData)
+            // console.log('uploaded image => ', data)
+            setImage({
+                url: data.url,
+                public_id: data.public_id,
+            })
+            setUploading(false)
+        } catch (err) {
+            console.log(err)
+            setUploading(false)
+        }
+    }
+
     return (
         <div className='container-fluid'>
             <div className='row py-5 bg-secondary text-light bg-default-image'>
@@ -75,6 +102,18 @@ const ProfileUpdate = () => {
 
             <div className='row py-5'>
                 <div className='col-md-6 offset-md-3'>
+
+                    <label className='d-flex justify-content-center h5'>
+                        {image && image.url ? (
+                            <Avatar size={30} src={image.url} className='mt-1' />
+                        ) : uploading ? (
+                            <LoadingOutlined className='mt-2' />
+                        ) : (
+                            <CameraOutlined className='mt-2' />
+                        )}
+                        <input onChange={handleImage} type='file' accept='images/*' hidden />
+                    </label>
+
                     <Form
                         profileUpdate={true}
                         username={username}
