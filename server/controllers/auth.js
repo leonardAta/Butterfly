@@ -74,15 +74,34 @@ export const login = async (req, res) => {
 }
 
 export const currentUser = async (req, res) => {
+    console.log(req.headers)
+    console.log(req.auth)
     try {
-        const user = await User.findById(req.user._id)
-        // res.json(user)
+        const user = await User.findById(req.auth._id)
+        //res.json(user)
         res.json({ ok: true })
     } catch (err) {
-        console.error(err)
+        console.log(err)
         res.sendStatus(400)
     }
 }
+// export const getCurrentUser = async () => {
+//     try {
+//         const { data } = await axios.get('/current-user', {
+//             headers: {
+//                 Authorization: `Bearer ${state.token}`, // Ensure the token is included in the request
+//             },
+//         })
+//         if (data.ok) {
+//             setOk(true)
+//         } else {
+//             throw new Error('Failed to fetch user data')
+//         }
+//     } catch (err) {
+//         console.log(err) // More detailed logging can help identify what went wrong
+//         router.push('/login')
+//     }
+// }
 
 export const forgotPassword = async (req, res) => {
     // console.log(req.body)
