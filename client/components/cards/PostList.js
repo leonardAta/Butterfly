@@ -7,7 +7,7 @@ import { HeartOutlined, HeartFilled, CommentOutlined, EditOutlined, DeleteOutlin
 import { UserContext } from '../../context'
 import { useRouter } from 'next/router'
 
-const PostList = ({ posts }) => {
+const PostList = ({ posts, handleDelete }) => {
     const [state] = useContext(UserContext)
     const router = useRouter()
 
@@ -41,7 +41,10 @@ const PostList = ({ posts }) => {
                                             onClick={() => router.push(`/user/post/${post._id}`)}
                                             className='text-danger pt-2 h5 px-2 mx-auto'
                                         />
-                                        <DeleteOutlined className='text-danger pt-2 h5 px-2' />
+                                        <DeleteOutlined
+                                            onClick={() => handleDelete(post)}
+                                            className='text-danger pt-2 h5 px-2'
+                                        />
                                     </>
                                 )}
                             </div>

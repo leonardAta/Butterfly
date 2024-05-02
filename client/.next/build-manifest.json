@@ -31,11 +31,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/user/dashboard.js"
-    ],
-    "/user/post/[_id]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/user/post/[_id].js"
     ]
   },
   "ampFirstPages": []
