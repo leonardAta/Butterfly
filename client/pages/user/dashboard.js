@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import PostList from '../../components/cards/PostList'
+import People from '../../components/cards/People'
 
 const Home = () => {
     const [state, setState] = useContext(UserContext)
@@ -14,10 +15,15 @@ const Home = () => {
     const [uploading, setUploading] = useState(false)
     const [posts, setPosts] = useState([])
 
+    const [people, setPeople] = useState([])
+
     const router = useRouter()
 
     useEffect(() => {
-        if (state && state.token) fetchUserPosts()
+        if (state && state.token) {
+            fetchUserPosts()
+            findPeople()
+        }
     }, [state && state.token])
 
     const fetchUserPosts = async () => {
@@ -25,6 +31,15 @@ const Home = () => {
             const { data } = await axios.get('/user-posts')
             // console.log('user posts => ', data)
             setPosts(data)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const findPeople = async () => {
+        try {
+            const { data } = await axios.get('/find-people')
+            setPeople(data)
         } catch (err) {
             console.log(err)
         }
@@ -82,6 +97,24 @@ const Home = () => {
         }
     }
 
+    const handleFollow = async (user) => {
+        // console.log('add user to following list', user)
+        try {
+            const { data } = await axios.put('/user-follow', { _id: user._id })
+            let auth = JSON.parse(localStorage.getItem('auth'))
+            auth.user = data
+            localStorage.setItem('auth', JSON.stringify(auth))
+            setState({ ...state, user: data })
+
+            let filtered = people.filter((p) => p._id !== user._id)
+            setPeople(filtered)
+
+            toast.success(`Now following ${user.name} 🧚‍♀️!`)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     return (
         <UserRoute>
             <div className='container-fluid'>
@@ -106,7 +139,9 @@ const Home = () => {
                     </div>
                     {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}
 
-                    <div className='col-md-4'>Sidebar</div>
+                    <div className='col-md-4'>
+                        <People people={people} handleFollow={handleFollow} />
+                    </div>
                 </div>
             </div>
         </UserRoute>

@@ -15,3 +15,7 @@ img {
 .active {
     background-color: rgb(45, 28, 7);
 }
+
+.pointer {
+    cursor: pointer;
+}

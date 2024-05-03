@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { UserContext } from '../context'
 import { useRouter } from 'next/router'
+import { Avatar } from 'antd'
 
 const Nav = () => {
     const [current, setCurrent] = useState('')
@@ -23,6 +24,7 @@ const Nav = () => {
     return (
         <nav className='nav d-flex justify-content-between' style={{ backgroundColor: '#000000' }}>
             <Link href='/' className={`nav-link text-light logo ${current === '/' && 'active'}`}>
+                <Avatar src='/images/logo.png' />
                 Butterfly
             </Link>
 
