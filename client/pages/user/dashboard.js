@@ -21,14 +21,14 @@ const Home = () => {
 
     useEffect(() => {
         if (state && state.token) {
-            fetchUserPosts()
+            timeLine()
             findPeople()
         }
     }, [state && state.token])
 
-    const fetchUserPosts = async () => {
+    const timeLine = async () => {
         try {
-            const { data } = await axios.get('/user-posts')
+            const { data } = await axios.get('/time-line')
             // console.log('user posts => ', data)
             setPosts(data)
         } catch (err) {
@@ -55,7 +55,7 @@ const Home = () => {
             if (data.error) {
                 toast.error(data.error)
             } else {
-                fetchUserPosts()
+                timeLine()
                 toast.success('Flutter Created!')
                 setContent('')
                 setImage({})
@@ -91,7 +91,7 @@ const Home = () => {
             if (!answer) return
             const { data } = await axios.delete(`/delete-post/${post._id}`)
             toast.error('Flutter deleted')
-            fetchUserPosts()
+            timeLine()
         } catch (err) {
             console.log(err)
         }
@@ -109,6 +109,7 @@ const Home = () => {
             let filtered = people.filter((p) => p._id !== user._id)
             setPeople(filtered)
 
+            timeLine()
             toast.success(`Now following ${user.name} 🧚‍♀️!`)
         } catch (err) {
             console.log(err)
