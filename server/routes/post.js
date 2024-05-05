@@ -12,6 +12,8 @@ import {
     updatePost,
     deletePost,
     timeLine,
+    likePost,
+    unlikePost,
 } from '../controllers/post.js'
 
 router.post('/create-post', requireSignin, createPost)
@@ -22,4 +24,7 @@ router.put('/update-post/:_id', requireSignin, canEditDeletePost, updatePost)
 router.delete('/delete-post/:_id', requireSignin, canEditDeletePost, deletePost)
 
 router.get('/time-line', requireSignin, timeLine)
+router.put('/like-post', requireSignin, likePost)
+router.put('/unlike-post', requireSignin, unlikePost)
+
 export default router
