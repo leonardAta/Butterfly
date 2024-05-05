@@ -27,10 +27,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/user/dashboard.js"
     ],
-    "/user/post/[_id]": [
+    "/user/following": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/user/post/[_id].js"
+      "static/chunks/pages/user/following.js"
     ]
   },
   "ampFirstPages": []

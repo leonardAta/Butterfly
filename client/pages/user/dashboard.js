@@ -142,14 +142,12 @@ const Home = () => {
                     {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}
 
                     <div className='col-md-4'>
-                        {state &&
-                            state.user &&
-                            state.user.following && (
-                                <Link className='h6' href={`/user/following`}>
-                                    {state.user.following.length} 
-                                     Following
-                                </Link>,
-                            )}
+                        {state && state.user && state.user.following && (
+                            <Link className='h6' href={`/user/following`}>
+                                {state.user.following.length}
+                                Following
+                            </Link>
+                        )}
                         <People people={people} handleFollow={handleFollow} />
                     </div>
                 </div>

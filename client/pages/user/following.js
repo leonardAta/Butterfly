@@ -5,9 +5,10 @@ import { useRouter } from 'next/router'
 import { UserContext } from '../../context'
 import axios from 'axios'
 import Link from 'next/link'
+import { RollbackOutlined } from '@ant-design/icons'
 
 const Following = () => {
-    const [state] = useContext(UserContext)
+    const [state, setState] = useContext(UserContext)
     const [people, setPeople] = useState([])
     const router = useRouter()
 
@@ -33,10 +34,24 @@ const Following = () => {
         }
     }
 
-    const handleFollow = async () => {}
+    const handleUnfollow = async (user) => {
+        try {
+            const { data } = await axios.put('/user-unfollow', { id: user._id })
+            let auth = JSON.parse(localStorage.getItem('auth'))
+            auth.user = data
+            localStorage.setItem('auth', JSON.stringify(auth))
+            setState({ ...state, user: data })
+
+            let filtered = people.filter((p) => p._id !== user._id)
+            setPeople(filtered)
+            toast.success(`${user.name} Unfollowed!🧚‍♀️!`)
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     return (
-        <>
+        <div className='row col-md-6 offset-md-3'>
             {/* <pre>{JSON.stringify(people, null, 4)}</pre> */}
             <List
                 itemLayout='horizontal'
@@ -48,9 +63,9 @@ const Following = () => {
                             title={
                                 <div className='d-flex justify-content-between'>
                                     {/* <Link href={`/user/${user.username}`}>{user.username}</Link> */}
-                                    {user.name}{' '}
-                                    <span onClick={() => handleFollow(user)} className='text-primary pointer'>
-                                        Follow
+                                    {user.username}{' '}
+                                    <span onClick={() => handleUnfollow(user)} className='text-primary pointer'>
+                                        Unfollow
                                     </span>
                                 </div>
                             }
@@ -58,7 +73,10 @@ const Following = () => {
                     </List.Item>
                 )}
             />
-        </>
+            <Link href='/user/dashboard' className='d-flex justify-content-center pt-5'>
+                <RollbackOutlined />
+            </Link>
+        </div>
     )
 }
 
