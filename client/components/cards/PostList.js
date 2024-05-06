@@ -7,8 +7,9 @@ import { HeartOutlined, HeartFilled, CommentOutlined, EditOutlined, DeleteOutlin
 import { UserContext } from '../../context'
 import { useRouter } from 'next/router'
 import { imageSource } from '../../functions'
+import Link from 'next/link'
 
-const PostList = ({ posts, handleDelete, handleLike, handleUnlike }) => {
+const PostList = ({ posts, handleDelete, handleLike, handleUnlike, handleComment }) => {
     const [state] = useContext(UserContext)
     const router = useRouter()
 
@@ -31,7 +32,7 @@ const PostList = ({ posts, handleDelete, handleLike, handleUnlike }) => {
                         <div className='card-footer'>
                             {post.image && <PostImage url={post.image.url} />}
                             <div className='d-flex pt-2'>
-                                {post.likes.includes(state.user._id) ? (
+                                {state && state.user && post.likes && post.likes.includes(state.user._id) ? (
                                     <HeartFilled
                                         onClick={() => handleUnlike(post._id)}
                                         className='text-danger pt-2 h5 px-2'
@@ -46,8 +47,16 @@ const PostList = ({ posts, handleDelete, handleLike, handleUnlike }) => {
                                 <div className='pt-2 pl-3' style={{ marginRight: '1rem' }}>
                                     {post.likes.length} likes
                                 </div>
-                                <CommentOutlined className='text-danger pt-2 h5 px-2' />
-                                <div className='pt-2 pl-3'>2 comments</div>
+                                <CommentOutlined
+                                    onClick={() => handleComment(post)}
+                                    className='text-danger pt-2 h5 px-2'
+                                />
+                                <div className='pt-2 pl-3'>
+                                    <Link href={`/post/${post._id}`}>
+                                        {post.comments.length}
+                                        comments
+                                    </Link>
+                                </div>
                                 {state && state.user && state.user?._id === post.postedBy?._id && (
                                     <>
                                         <EditOutlined
@@ -62,6 +71,10 @@ const PostList = ({ posts, handleDelete, handleLike, handleUnlike }) => {
                                 )}
                             </div>
                         </div>
+                        {/* 3 comments */}
+                        {/* {post.comments && post.comments.length > 0 && (
+
+                        )} */}
                     </div>
                 ))}
         </>
@@ -69,5 +82,3 @@ const PostList = ({ posts, handleDelete, handleLike, handleUnlike }) => {
 }
 
 export default PostList
-
-// {post.postedBy.name} {post.postedBy.name[0]}

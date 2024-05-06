@@ -4,5 +4,5 @@
   "/_document": "pages/_document.js",
   "/user/following": "pages/user/following.js",
   "/user/dashboard": "pages/user/dashboard.js",
-  "/": "pages/index.js"
+  "/user/profile/update": "pages/user/profile/update.js"
 }
