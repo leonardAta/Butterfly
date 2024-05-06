@@ -2,7 +2,8 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/user/following": "pages/user/following.js",
   "/user/dashboard": "pages/user/dashboard.js",
-  "/user/profile/update": "pages/user/profile/update.js"
+  "/login": "pages/login.js",
+  "/post/[_id]": "pages/post/[_id].js",
+  "/": "pages/index.js"
 }

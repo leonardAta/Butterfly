@@ -8,6 +8,7 @@ import { UserContext } from '../../context'
 import { useRouter } from 'next/router'
 import { imageSource } from '../../functions'
 import Link from 'next/link'
+import Post from '../../components/cards/Post'
 
 const PostList = ({ posts, handleDelete, handleLike, handleUnlike, handleComment }) => {
     const [state] = useContext(UserContext)
@@ -17,65 +18,13 @@ const PostList = ({ posts, handleDelete, handleLike, handleUnlike, handleComment
         <>
             {posts &&
                 posts.map((post) => (
-                    <div key={post._id} className='card mb-5'>
-                        <div className='card-header'>
-                            {/* <Avatar size={40}>{post.postedBy?.name[0]}</Avatar> */}
-                            <Avatar size={40} src={imageSource(post.postedBy)} />
-                            <span className='pt-2 ml-3' style={{ marginLeft: '0.5rem' }}>
-                                {post.postedBy?.name}
-                            </span>
-                            <span className='pt-2 ml-3' style={{ marginLeft: '0.5rem' }}>
-                                {moment(post.createdAt).fromNow()}
-                            </span>{' '}
-                        </div>
-                        <div className='card-body'>{renderHTML(post.content)}</div>
-                        <div className='card-footer'>
-                            {post.image && <PostImage url={post.image.url} />}
-                            <div className='d-flex pt-2'>
-                                {state && state.user && post.likes && post.likes.includes(state.user._id) ? (
-                                    <HeartFilled
-                                        onClick={() => handleUnlike(post._id)}
-                                        className='text-danger pt-2 h5 px-2'
-                                    />
-                                ) : (
-                                    <HeartOutlined
-                                        onClick={() => handleLike(post._id)}
-                                        className='text-danger pt-2 h5 px-2'
-                                    />
-                                )}
-
-                                <div className='pt-2 pl-3' style={{ marginRight: '1rem' }}>
-                                    {post.likes.length} likes
-                                </div>
-                                <CommentOutlined
-                                    onClick={() => handleComment(post)}
-                                    className='text-danger pt-2 h5 px-2'
-                                />
-                                <div className='pt-2 pl-3'>
-                                    <Link href={`/post/${post._id}`}>
-                                        {post.comments.length}
-                                        comments
-                                    </Link>
-                                </div>
-                                {state && state.user && state.user?._id === post.postedBy?._id && (
-                                    <>
-                                        <EditOutlined
-                                            onClick={() => router.push(`/user/post/${post._id}`)}
-                                            className='text-danger pt-2 h5 px-2 mx-auto'
-                                        />
-                                        <DeleteOutlined
-                                            onClick={() => handleDelete(post)}
-                                            className='text-danger pt-2 h5 px-2'
-                                        />
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                        {/* 3 comments */}
-                        {/* {post.comments && post.comments.length > 0 && (
-
-                        )} */}
-                    </div>
+                    <Post
+                        post={post}
+                        handleDelete={handleDelete}
+                        handleLike={handleLike}
+                        handleUnlike={handleUnlike}
+                        handleComment={handleComment}
+                    />
                 ))}
         </>
     )
