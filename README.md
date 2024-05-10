@@ -19,4 +19,16 @@ Sign up : Users can create new account. <br>
 Login : Existing users can log in to their accounts securely.<br>
 Post Upload : Users can upload posts, interact with other users and share their contents.<br>
 
+## ⚙️ How To Run This App Locally
 
+cd into server
+`npm install`
+`npm start`
+
+cd into client
+`npm install`
+`npm run dev`
+
+## ⚙️ Live Site
+
+https://butterfly-client-06dc601d37ee.herokuapp.com/
